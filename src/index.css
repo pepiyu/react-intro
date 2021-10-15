@@ -147,7 +147,7 @@ a {
   }
 
   .navbar-expand-lg .navbar-collapse {
-      justify-content: space-between;
+      justify-content: right;
   }
 }
 

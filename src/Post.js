@@ -1,14 +1,45 @@
 
+import Comments from './Comments.js'
+import React, { useState } from 'react'
+
+
+
 function Post(props) {
 
-    const {img, user, description, time, comments, likes, addLike, id} = props
+    const {img, user, description, time, comments, likes, addLike, id, addComment, onChangeComment} = props
 
-    let commentsHtml = ''
 
-    comments.forEach(comment =>{
-        commentsHtml += `<p><b>${user}</b>
-        ${comment}</p>`
+    const [newComment, saveNewComment] = useState({
+        commentArea:'',
     })
+
+    const onChange = e=>{
+        saveNewComment({
+            ...commentArea,
+            [e.target.name]: e.target.value
+
+        })
+
+        
+        onChangeComment(e.target.value)
+    }
+
+
+    const {commentArea} = newComment
+
+    const onSubmit = e=>{
+        e.preventDefault()
+
+        if (e.target.value === ''){
+
+        }
+
+        addComment(id, commentArea)
+
+        newComment.commentArea = ''
+
+    }
+
 
     return(
 
@@ -26,18 +57,28 @@ function Post(props) {
                     <p className="card-text">{description}</p>
                     <a className="text-muted" name="comments"><i className="fas fa-comments"></i> comments({comments.length})</a>
                     <div name="comment-block" className="my-2">
-                        <div name="comments-list" className="my-2" dangerouslySetInnerHTML={{__html: commentsHtml}} >
+                        <div name="comments-list" className="my-2">
+
+
+                        {comments.map((comment, index) =>
+                            <Comments key={index} user={user} comment={comment}/>
+                        )}
 
                         </div>
                         <div name="comment-text-area" className="my-2">
-                            <textarea className="form-control my-1; width: 100%;" name="commentArea" cols="30" rows="3"></textarea>
-                            <div className="d-flex my-2" 
-                            style={{justifyContent: 'flex-end'}}
-                            >
-                                <a className="btn" name="replies" 
+
+                            <form onSubmit={onSubmit}
+>
+
+                                <textarea className="form-control my-1; width: 100%;" value={commentArea} name="commentArea" cols="30" rows="3" onChange={onChange}></textarea>
+                                <div className="d-flex my-2" 
                                 style={{justifyContent: 'flex-end'}}
-                                >Reply</a>
-                            </div>
+                                >
+                                    <button type="submit" className="btn" name="replies"
+                                    style={{justifyContent: 'flex-end'}}
+                                    >Reply</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

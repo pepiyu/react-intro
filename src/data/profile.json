@@ -1,7 +1,6 @@
-[
+
     {
-        "user": 0,
-        "avatar": 50,
+        "user": "Alexender Schidmt",
+        "avatar": "https://ssbworld.com/images/character-profiles/square/Mii-Brawler-Profile-Square.png",
         "bio": "Some quick example text to build on the card title and make up the bulk of the cards content."
     }
-]

@@ -1,4 +1,4 @@
-function SearchBar({onSearch}) {
+function SearchBar({onSearch, value}) {
     return(
         <form>
             <div className="col-12 form-tweet">
@@ -9,6 +9,7 @@ function SearchBar({onSearch}) {
                 id="description-input" 
                 maxLength="280" 
                 placeholder="Search"
+                value={value}
                 onChange={(e)=> onSearch(e.target.value)}
                 />
 

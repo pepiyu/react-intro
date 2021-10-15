@@ -3,55 +3,31 @@ import Post from './Post.js'
 
 function PostsList(props) {
 
-    const {posts, addLike, searchValue, filtered} = props
+    const {posts, addLike, searchValue, addComment, onChangeComment} = props
+    const filteredPost = searchValue === '' ? posts : posts.filter(post => post.description.toLowerCase().includes(searchValue))
+    return(
+    <>
+        {filteredPost.map((searchedPosts, index) => 
 
-    console.log(searchValue);
-    
-            posts.filter(post => post.description.toLowerCase().includes(searchValue)).map((searchedPosts, index) => {
-                console.log(searchedPosts);
-                return(
-                    <>
-                <Post
-                key={index}
-                description={searchedPosts.description}
-                time={searchedPosts.time}
-                img={searchedPosts.img}
-                likes={searchedPosts.likes}
-                comments={searchedPosts.comments}
-                addLike={addLike}
-                id={searchedPosts.id}
-                />
+            <Post
+            key={index}
+            description={searchedPosts.description}
+            user={searchedPosts.user}
+            time={searchedPosts.time}
+            img={searchedPosts.img}
+            likes={searchedPosts.likes}
+            comments={searchedPosts.comments}
+            addLike={addLike}
+            addComment={addComment}
+            onChangeComment={onChangeComment}
+            id={searchedPosts.id}
+            />
+
+        )}
         </>
-            )
-            })}
-
-
-/*     if (filtered == false) {
-        return(
-            <>
-                {posts.map((post, index) => (
-                    <Post
-                    key={index}
-                    description={post.description}
-                    time={post.time}
-                    img={post.img}
-                    likes={post.likes}
-                    comments={post.comments}
-                    addLike={addLike}
-                    id={post.id}
-                    />
-                ))}
-
-            
-            </>
-        )
-
-    } else {
-
-
-
-    } */
-
+    )
+        
 }
+
 
 export default PostsList
