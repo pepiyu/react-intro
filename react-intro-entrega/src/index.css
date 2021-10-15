@@ -151,11 +151,3 @@ a {
   }
 }
 
-.profile {
-  text-align: center;
-  background-color: #fff;
-  position: absolute;
-  z-index: 1;
-  padding: 3em 0em 3em 0em;
-  width: 100%;
-}
