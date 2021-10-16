@@ -3,9 +3,10 @@ import Navbar from './Navbar.js';
 import SearchBar from './SearchBar.js';
 import PostsList from './PostsList.js';
 import posts from './data/posts.json';
-import profile from './data/profile.json';
 import Profile from './Profile.js';
 import React from 'react'
+import Login from './Login.js'
+import {getProfileByID} from './services/profileService.js'
 
 
 class App extends React.Component {
@@ -15,12 +16,25 @@ class App extends React.Component {
     filtered: false,
     searchValue: '',
     posts: [],
-    profileOpen: false,
+    toggleOpen: false,
     navOpen: false,
     profile: [],
+    section: 'home'
   }
 
+  changeSection = (section) => {
+    this.setState({section})
+  }
 
+  onLoginComplete = (profile) => {
+    localStorage.setItem('id', profile.id);
+    this.setState({profile})
+  }
+
+  logout = () => {
+    localStorage.removeItem('id')
+    this.changeSection('home')
+  }
 
   searchFilter(searchValue) {
     this.setState({searchValue: searchValue})
@@ -31,7 +45,27 @@ class App extends React.Component {
     this.timeout = setTimeout(() => {
       this.setState({posts})
     }, 500)
-    this.setState({profile})
+
+    const id = localStorage.getItem('id');   
+    
+    if (id) {
+
+      getProfileByID(id).then(response =>{
+        this.changeSection('login')
+        this.onLoginComplete(response.data)
+  
+      })
+      .catch(err => {
+          if (err.response.status === 401) {
+              this.changeSection('home')
+            }
+            if (err.response.status === 400) {
+              this.changeSection('home')
+          }
+      })
+    
+    }
+
   }
 
   addLike(id) {
@@ -64,16 +98,18 @@ class App extends React.Component {
 
   onLogoClick() {
     this.setState({searchValue: ''})
+    this.setState({toggleOpen: false})
     
   }
   
   onProfileClick() {
-    this.setState({profileOpen: !this.state.profileOpen})
+    this.setState({toggleOpen: !this.state.toggleOpen})
     
   }
   
   onNavClick() {
     this.setState({navOpen: !this.state.navOpen})
+
   }
 
   onChangeComment(comment) {
@@ -87,10 +123,47 @@ class App extends React.Component {
     
   }
 
-
-
   render() {
+    const getComponent = () => {
+      switch (this.state.section) {
+        case "home":
+          return (
+          <>
+          <Login toggleOpen={this.state.toggleOpen} changeSection={this.changeSection} onLoginComplete={this.onLoginComplete}/>
+          </>
 
+          )
+          case "login":
+            
+            return (
+            <>
+              <Profile toggleOpen={this.state.toggleOpen} profile={this.state.profile} logout={this.logout}/>
+                {this.state.posts.length > 0 ?
+                (
+                  <div className="row my-3">
+                  <SearchBar
+                    value={this.state.searchValue}
+                    onSearch={(searchValue)=> this.onSearch(searchValue)}
+                    />
+
+                  
+                  <PostsList 
+                  addComment = {(id, commentArea)=> this.addComment(id, commentArea)} 
+                  onChangeComment = {(comment)=> this.onChangeComment(comment)} 
+                  addLike = {(id)=> this.addLike(id)} 
+                  filtered = {this.state.filtered}
+                  posts = {this.state.posts}
+                  searchValue={this.state.searchValue}/>
+                </div>
+                )  : 'Loading...'
+                
+                }
+            </>
+
+            )
+            
+      }
+    }
 
 
     return (
@@ -99,31 +172,16 @@ class App extends React.Component {
       onProfileClick={()=>this.onProfileClick()}
       onLogoClick={()=>this.onLogoClick()}
       onNavClick={()=>this.onNavClick()}
-      profileOpen={this.state.profileOpen}
+      toggleOpen={this.state.toggleOpen}
       navOpen={this.state.navOpen}
+      section={this.state.section}
       />
-      <div className="profile-back">
-        <Profile profileOpen={this.state.profileOpen} profile={this.state.profile}/>
-      </div>
-      <main className="container">
-        {this.state.posts.length > 0 ?
-        (
-        <div className="row my-3">
-          <SearchBar
-            value={this.state.searchValue}
-            onSearch={(searchValue)=> this.onSearch(searchValue)}
-          />
-          <PostsList 
-          addComment = {(id, commentArea)=> this.addComment(id, commentArea)} 
-          onChangeComment = {(comment)=> this.onChangeComment(comment)} 
-          addLike = {(id)=> this.addLike(id)} 
-          filtered = {this.state.filtered}
-          posts = {this.state.posts}
-          searchValue={this.state.searchValue}/>
-        </div>
-        )  : 'Loading...'
+
+      
+      <main className="container py-5">
+
         
-        }
+        {getComponent()}
       </main>
 
     </div>

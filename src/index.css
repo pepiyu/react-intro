@@ -9,10 +9,14 @@ footer {
 
 .form-tweet {
   display: flex;
+  padding: 0em 0em 2em 0em
 }
 
 .user {
 font-size: 30px;
+display: flex;
+align-items: right;
+
 }
 
 .card {
@@ -87,37 +91,6 @@ margin: 4px;
   align-items: right;
 }
 
-#log-in {
-  position: relative;
-  display: flex;
-  justify-content: flex-start;
-}
-
-@media (min-width: 992px){
-  #log-in {
-      justify-content: flex-end;
-  }
-}
-
-#log-in form {
-  padding: 1rem;
-  margin: 0.5em;
-  background-color: #000;
-  position: absolute;
-  width: 95%;
-  z-index: 1;
-  align-items: center;
-  border-radius: 1rem;
-  
-}
-
-@media (min-width: 576px){
-  #log-in form {
-    width: 300px;
-
-  }
-}
-
 
 a { 
   cursor: pointer; 
@@ -125,11 +98,6 @@ a {
 }
 
 @media (min-width: 992px){
-  .user {
-    display: flex;
-    align-items: right;
-
-  }
 
   .card {
     margin: 7px;
@@ -138,8 +106,10 @@ a {
 }
 
 .navbar {
-  padding: 10px 20px
+  padding: 10px 20px;
+  justify-content: space-between;
 }
+
 
 @media (min-width: 992px){
   .navbar {
@@ -154,8 +124,28 @@ a {
 .profile {
   text-align: center;
   background-color: #fff;
-  position: absolute;
   z-index: 1;
-  padding: 3em 0em 3em 0em;
+  padding: 0em 0em 3em 0em;
   width: 100%;
+}
+
+#signin-btn {
+  margin: 1.5em 0em;
+  background-color: #000;
+  border-radius: 3rem;
+  color: #fff;
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
