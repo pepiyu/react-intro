@@ -1,5 +1,5 @@
 import React from 'react'
-import {getProfile} from './services/profileService.js'
+import {getProfile} from '../services/profileService.js'
 
 class Login extends React.Component {
 
@@ -78,7 +78,7 @@ class Login extends React.Component {
                                 className='form-control'
                                 placeholder="password"
                                 name="password"
-                                value="P4ssW0rd!#"
+                                defaultValue="P4ssW0rd!#"
                                 />
 
                             </div>

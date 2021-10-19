@@ -1,11 +1,11 @@
 import './App.css';
-import Navbar from './Navbar.js';
-import SearchBar from './SearchBar.js';
-import PostsList from './PostsList.js';
+import Navbar from './components/Navbar.js';
+import SearchBar from './components/SearchBar.js';
+import PostsList from './components/PostsList.js';
 import posts from './data/posts.json';
-import Profile from './Profile.js';
+import Profile from './components/Profile.js';
 import React from 'react'
-import Login from './Login.js'
+import Login from './components/Login.js'
 import {getProfileByID} from './services/profileService.js'
 
 
@@ -44,7 +44,7 @@ class App extends React.Component {
   componentDidMount() {
     this.timeout = setTimeout(() => {
       this.setState({posts})
-    }, 500)
+    }, 3000)
 
     const id = localStorage.getItem('id');   
     

@@ -1,6 +1,6 @@
 //import React from "react"
 
-function Navbar ({onProfileClick, onNavClick, navOpen, onLogoClick, section}) {
+function Navbar ({onProfileClick, onLogoClick, section}) {
 
     const profileIcon = () => {
         return (
