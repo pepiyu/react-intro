@@ -1,4 +1,13 @@
-function SearchBar({onSearch, value}) {
+import React, { Fragment, useState, useEffect } from 'react';
+
+function SearchBar({search, setSearch}) {
+
+
+    function onChange(e) {
+        e.preventDefault()
+        setSearch(e.target.value);
+    }
+
     return(
         <form>
             <div className="col-12 col-md-6 offset-md-3 form-tweet">
@@ -9,8 +18,8 @@ function SearchBar({onSearch, value}) {
                 id="description-input" 
                 maxLength="280" 
                 placeholder="Search"
-                value={value}
-                onChange={(e)=> onSearch(e.target.value)}
+                value={search}
+                onChange={onChange}
                 />
 
             </div>

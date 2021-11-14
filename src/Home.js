@@ -6,15 +6,11 @@ function Home() {
 
     const [searchValue, setSearchValue] = useState('')
 
-    const onSearch = (value) => {
-        setSearchValue(value)
-    }
+
 
     return (
         <>
-            <SearchBar
-            onSearch={(searchValue)=> onSearch(searchValue)}
-            />
+            <SearchBar/>
             
             <PostsList 
             searchValue={searchValue}/>

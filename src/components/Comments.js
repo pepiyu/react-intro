@@ -1,9 +1,9 @@
 
-function Comments({user, comment}) {
+function Comments({author, comment}) {
 
     return(
 
-    <p><b>{user} </b>
+    <p><b>{author} </b>
     {comment}</p>
 
 

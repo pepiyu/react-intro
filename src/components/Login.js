@@ -1,14 +1,16 @@
-import React from 'react'
-import {getProfile} from '../services/profileService.js'
-
-class Login extends React.Component {
-
-    state = {
-        error: false,
-    }
+import React, { useState } from 'react';
+import {getProfile} from '../services/API.js'
+import { useHistory } from 'react-router-dom'
 
 
-    onSubmit = (e) => {
+function Login(props) {
+
+    const { replace } = useHistory()
+    const {setSection, onLoginComplete} = props
+    const [error, setError] = useState(false)
+
+
+    const onSubmit = (e) => {
         e.preventDefault()
 
         if (e.target.username.value !== '' && e.target.password.value !== '') {
@@ -18,24 +20,25 @@ class Login extends React.Component {
                 password: e.target.password.value,
             }
     
-    
-            
             getProfile(body)
-                .then(response =>{
-                    console.log(response);
-                    this.state.error = false
-                    this.props.changeSection('login')
-                    this.props.onLoginComplete(response.data)
+                .then(response => {
+                    console.log(response)
+                    setError(false)
+                    onLoginComplete(response)
+                    replace('/')
         
                 })
                 .catch(err => {
                     if (err.response.status === 401) {
-                        this.state.error = true
-                        this.props.changeSection('home')
-                    }
+                        setError(true)
+                        setSection('home')
+                        replace('/login')
+
+                    }else 
                     if (err.response.status === 400) {
-                        this.state.error = true
+                        setError(true)
                     }
+
                 })
         }
 
@@ -43,61 +46,56 @@ class Login extends React.Component {
 
         {
             e.target.username.classList += ' is-invalid'
-            this.state.error = true
+            setError(true)
         }
-
-        
-        
-
 
     }
 
-    render() {
-        return (
 
-            
+    return (
 
-            
-            <div className="row">
-                <div id="log-in" className="col-12 col-md-6 offset-md-3">
+        
 
-                    <div className="card">
+        
+        <div className="row">
+            <div id="log-in" className="col-12 col-md-6 offset-md-3">
 
-                        <form onSubmit={this.onSubmit} className="p-5">
-                            <div className="col-12 mb-2">
-                                <input type="text" 
-                                className='form-control'
-                                placeholder="username"
-                                name="username"
+                <div className="card">
 
-                                />
-                                
-                            </div>
-                            <div className="col-12 mb-2">
-                                <input type="password" 
-                                className='form-control'
-                                placeholder="password"
-                                name="password"
-                                defaultValue="P4ssW0rd!#"
-                                />
+                    <form onSubmit={onSubmit} className="p-5">
+                        <div className="col-12 mb-2">
+                            <input type="text" 
+                            className='form-control'
+                            placeholder="username"
+                            name="username"
 
-                            </div>
-                            <div className={this.state.error == true ? "invalid-feedback d-block" : "invalid-feedback "} >
-                            Invalid username or password
-                            </div>
-                            <div className="col-12 mb-2">
-                                <button type="submit" id="signin-btn">Sign in</button>
+                            />
+                            
+                        </div>
+                        <div className="col-12 mb-2">
+                            <input type="password" 
+                            className='form-control'
+                            placeholder="password"
+                            name="password"
+                            defaultValue="P4ssW0rd!#"
+                            />
 
-                            </div>
-                        </form>
+                        </div>
+                        <div className={error == true ? "invalid-feedback d-block" : "invalid-feedback "} >
+                        Invalid username or password
+                        </div>
+                        <div className="col-12 mb-2">
+                            <button type="submit" id="signin-btn">Sign in</button>
 
-                    </div>
+                        </div>
+                    </form>
 
                 </div>
 
             </div>
-        )
-    }
+
+        </div>
+    )
 }
 
 export default Login
