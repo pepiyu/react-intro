@@ -1,6 +1,10 @@
-import React, { Fragment, useState, useEffect } from 'react';
+function SearchBar({search, setSearch, resetFilter, setResetFilter}) {
 
-function SearchBar({search, setSearch}) {
+    if (resetFilter) {
+        search = ''
+        setResetFilter(false)
+    }
+
 
 
     function onChange(e) {
@@ -8,11 +12,12 @@ function SearchBar({search, setSearch}) {
         setSearch(e.target.value);
     }
 
+
     return(
         <form>
             <div className="col-12 col-md-6 offset-md-3 form-tweet">
 
-                <input 
+                <input
                 type="text" 
                 className="form-control" 
                 id="description-input" 

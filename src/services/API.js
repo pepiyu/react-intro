@@ -3,6 +3,7 @@ import axios from "axios"
 const http = axios.create({
     baseURL: "https://3p.apps-dev.tid.es/api",
     withCredentials: true
+
 })
 
 http.interceptors.response.use(
@@ -15,14 +16,32 @@ http.interceptors.response.use(
     }
 )
 
-export const getProfile = (body) => http.post('/login', body)
+export const getProfile = async (body) => {
 
-export const getProfileByID = (id) => http.get(`/users/${id}`)
+    return await http.post('/login', body)
+}
+export const getProfileByID = async (id) => {
 
-export const getPosts = () => http.get('/posts')
-export const createPost = () => http.post('/posts')
-export const createComment = (postId, body) => http.post(`/posts/${postId}/comments`, body)
+    return await http.get(`/users/${id}`)
+}
+export const getPosts = async () => {
 
-export const giveLike = (postId) => http.post(`/posts/${postId}/like`)
+    return await http.get('/posts')
+}
+export const createPost = async () => {
 
-export const logout = () => http.post('/logout')
+    return await http.post('/posts')
+}
+
+export const createComment = async (postId, body) => {
+
+    return await http.post(`/posts/${postId}/comments`, body)
+}
+export const giveLike = async (postId) => {
+
+    return await http.post(`/posts/${postId}/like`)
+}
+export const logOut = async () => {
+
+    return await http.post('/logout')
+}

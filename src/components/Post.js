@@ -25,7 +25,17 @@ function Post(props) {
         }
 
         if (e.target.value !== '') {
-            createComment(id, body)
+            createComment(id, body).then(response => {
+                getPosts()
+                .then(response => {
+                    setPosts(response)
+                })
+            }
+            )
+            .catch(err => {
+                console.log(err);
+            })
+
         }
 
 
@@ -34,14 +44,16 @@ function Post(props) {
     function addLike(id) {
 
         giveLike(id)
-          .then(response => {
+          .then(
             getPosts()
             .then(response => {
                 setPosts(response)
             })
-        })
-    
-      }
+            )
+            .catch(err => {
+                console.log(err);
+            })
+    }
 
 
     return (
@@ -53,7 +65,6 @@ function Post(props) {
                     <div className="d-flex justify-content-between">
                     <p className="card-text text-muted">{createdAt}</p>
                     <a className="btn" onClick={() => {addLike(id)}} name="likes"><i className="fas fa-heart" style={{textAlign: 'right'}}></i> {likes} likes</a>
-                    {/* <a className="btn" onClick={() => {alert(id)}} name="likes"><i className="fas fa-heart" style={{textAlign: 'right'}}></i> {likes} likes</a> */}
                     
                     </div>
                     <p className="card-text fw-bold">{author}</p>
@@ -72,9 +83,7 @@ function Post(props) {
                         </div>
                         <div name="comment-text-area" className="my-2">
 
-                            <form onSubmit={onSubmit}
->
-
+                            <form onSubmit={onSubmit}>
                                 <textarea className="form-control my-1; width: 100%;" value={newComment} name="commentArea" cols="30" rows="3" onChange={onChange}></textarea>
                                 <div className="d-flex my-2" 
                                 style={{justifyContent: 'flex-end'}}

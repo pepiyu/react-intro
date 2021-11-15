@@ -1,18 +1,25 @@
 import Post from './Post.js'
-import { getPosts } from '../services/API.js'
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import SearchBar from '../components/SearchBar.js';
 
 
 function PostsList(props) {
 
+    const [search, setSearch] = useState("")
 
 
-    const {addLike, addComment, onChangeComment, search, posts, setPosts} = props
+    const { onChangeComment, posts, setPosts, resetFilter, setResetFilter} = props
     
     const filteredPost = search === '' ? posts : posts.filter(post => post.text.toLowerCase().includes(search))
-    console.log(search);
     return (
     <>
+
+            <SearchBar
+            search={search}
+            setSearch={setSearch}
+            resetFilter={resetFilter}
+            setResetFilter={setResetFilter}
+            />
 
         {posts.length > 0 ?
             (
@@ -27,8 +34,6 @@ function PostsList(props) {
                 image={searchedPosts.image}
                 likes={searchedPosts.likes}
                 comments={searchedPosts.comments}
-                addLike={addLike}
-                addComment={addComment}
                 onChangeComment={onChangeComment}
                 setPosts={setPosts}
                 id={searchedPosts.id}

@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom'
 function Login(props) {
 
     const { replace } = useHistory()
-    const {setSection, onLoginComplete} = props
+    const {onLoginComplete} = props
     const [error, setError] = useState(false)
 
 
@@ -22,8 +22,6 @@ function Login(props) {
     
             getProfile(body)
                 .then(response => {
-                    console.log(response)
-                    setError(false)
                     onLoginComplete(response)
                     replace('/')
         
@@ -31,7 +29,6 @@ function Login(props) {
                 .catch(err => {
                     if (err.response.status === 401) {
                         setError(true)
-                        setSection('home')
                         replace('/login')
 
                     }else 
@@ -51,12 +48,8 @@ function Login(props) {
 
     }
 
-
     return (
 
-        
-
-        
         <div className="row">
             <div id="log-in" className="col-12 col-md-6 offset-md-3">
 
@@ -68,7 +61,7 @@ function Login(props) {
                             className='form-control'
                             placeholder="username"
                             name="username"
-
+                            defaultValue="john"
                             />
                             
                         </div>

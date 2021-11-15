@@ -4,23 +4,20 @@ import PostsList from './components/PostsList.js';
 import Profile from './components/Profile.js';
 import React, { Fragment, useState, useEffect } from 'react';
 import Login from './components/Login.js'
-import {getProfileByID, getPosts, giveLike} from './services/API.js'
+import {getProfileByID, getPosts, logOut} from './services/API.js'
 import { Route, Switch, useHistory } from 'react-router-dom'
-import SearchBar from './components/SearchBar.js';
 
 
 
 function App () {
 
 
-  const [timeout, setTimeout] = useState(null)
   const [toggleOpen, setToggleOpen] = useState(false)
   const [navOpen, setNavOpen] = useState(false)
   const [profile, setProfile] = useState([])
-  const [section, setSection] = useState('home')
-  const [comment, setComment] = useState('')
-  const [search, setSearch] = useState("")
   const[posts, setPosts] = useState([])
+  const[loggedIn, setLoggedIn] = useState(false)
+  const [resetFilter, setResetFilter] = useState(false)
 
   const history = useHistory()
 
@@ -29,14 +26,7 @@ function App () {
     const id = localStorage.getItem('id')
     
     if(id){
-
-      getPosts()
-        .then(response => {
-            setPosts(response)
-        })
-
       getProfileByID(id).then(response =>{
-        setSection('login')
         onLoginComplete(response)
           history.push('/')
         })
@@ -49,51 +39,41 @@ function App () {
 
   function onLoginComplete (profile) {
     localStorage.setItem('id', profile.id);
+    getPosts()
+    .then(response => {
+        setPosts(response)
+    })
+    setLoggedIn(true)
     setProfile(profile)
   }
-
+  
   const logout = () => {
-    localStorage.removeItem('id')
-    setSection('home')
-  }
-
-
-  function addComment(id, commentArea) {
-    const newPosts = posts.map(post => {
-      if(post.id === id) {
-        const newComments = post.comments.slice(0)
-        newComments.push(commentArea)
-        return { ...post, comments: newComments} 
-      } 
-      return {...post} 
-    })
     
-    setPosts({posts: newPosts})
+    logOut().then(
+      localStorage.removeItem('id')
+      
+      )
+      setLoggedIn(false)
+      history.push('/login')
+
   }
   
-
-  function componentWillUnmount() {
-    clearTimeout(timeout)
-  }
-
   function onLogoClick() {
-    setSearch('')
-    setToggleOpen(false)
+
+    setResetFilter(true)
     
   }
   
   function onProfileClick() {
+    
+    toggleOpen ? history.push('/') : history.push('/profile')
     setToggleOpen(!toggleOpen)
     
   }
   
   function onNavClick() {
+    
     setNavOpen(!navOpen)
-
-  }
-
-  function onChangeComment(comment) {
-    setComment({comment: comment})
   }
   
 
@@ -106,7 +86,7 @@ function App () {
       onNavClick={()=>onNavClick()}
       toggleOpen={setToggleOpen}
       navOpen={setNavOpen}
-      section={setSection}
+      loggedIn={loggedIn}
       />
 
       
@@ -114,27 +94,29 @@ function App () {
       <Switch>
       <Route path="/login" exact component={() => {
         return(
-          <Login setSection={setSection} onLoginComplete={(profile)=>onLoginComplete(profile)}/>   
+          <Login onLoginComplete={(profile)=>onLoginComplete(profile)}/>   
+        )
+      }}>
+
+      </Route>
+      <Route path="/profile" exact component={() => {
+        return(
+          <Profile profile={profile} logout={logout}/>
         )
       }}>
 
       </Route>
 
-      <Route path="/" exact component={() => {
-          return(
+          <Route path="/" exact component={() => {
+            return(
             <Fragment>
-            <Profile profile={profile} logout={logout}/>
             <div className="row my-3">
-              <SearchBar
-              search={search}
-              setSearch={setSearch}
-              />
+
               <PostsList
               posts={posts}
               setPosts={setPosts}
-              addComment = {(id, commentArea)=> addComment(id, commentArea)} 
-              onChangeComment = {(comment)=> onChangeComment(comment)} 
-              search={search}
+              resetFilter={resetFilter}
+              setResetFilter={setResetFilter}
               />
 
             </div>

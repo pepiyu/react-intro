@@ -1,10 +1,9 @@
-//import React from "react"
 
-function Navbar ({onProfileClick, onLogoClick, section}) {
+function Navbar ({onProfileClick, onLogoClick, loggedIn}) {
 
     const profileIcon = () => {
         return (
-            section === 'home' ? '' : 
+            !loggedIn ? '' : 
             <a className="user btn" id="user" onClick={() => {onProfileClick()}}><i className="far fa-user-circle"></i></a>
 
         )
